@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "tridentsloadchunks",
+  "version": "${version}",
+  "name": "TridentsLoadChunks",
+  "description": "Tridents load chunks now.",
+  "authors": ["flamgop"],
+  "contact": {},
+  "license": "MPL-2.0",
+  "icon": "assets/tridentsloadchunks/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "net.flamgop.tlc.TridentsLoadChunks"
+    ]
+  },
+  "mixins": [
+    "tridentsloadchunks.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
