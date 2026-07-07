@@ -9,13 +9,14 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.entity.projectile.arrow.ThrownTrident;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.BlockHitResult;
@@ -73,9 +74,11 @@ public abstract class ThrownTridentMixin extends AbstractArrow {
         BlockPos hitPos = blockHitResult.getBlockPos();
         if (TridentsLoadChunks.instance().config().lightningParity() && this.hasChanneling && this.level() instanceof ServerLevel level) {
             BlockState state = this.level().getBlockState(hitPos);
-            if (level.isRaining() && hitPos.getY() == level.getHeight(Heightmap.Types.WORLD_SURFACE, hitPos.getX(), hitPos.getZ()) - 1 && state.is(Blocks.LIGHTNING_ROD)) {
+            if (level.isRaining() && hitPos.getY() == level.getHeight(Heightmap.Types.WORLD_SURFACE, hitPos.getX(), hitPos.getZ()) - 1 && state.is(BlockTags.LIGHTNING_RODS)) {
+                level.playSound(null, hitPos.getX(), hitPos.getY(), hitPos.getZ(), SoundEvents.TRIDENT_THUNDER, this.getSoundSource(), 5.0f, 1.0f);
+
                 BlockPos lightningPos = hitPos.above(1);
-                LightningBolt lightningBolt = EntityType.LIGHTNING_BOLT.create(level, EntitySpawnReason.EVENT);
+                LightningBolt lightningBolt = EntityTypes.LIGHTNING_BOLT.create(level, EntitySpawnReason.EVENT);
                 if (lightningBolt != null) {
                     lightningBolt.snapTo(Vec3.atBottomCenterOf(lightningPos));
                     lightningBolt.setVisualOnly(false);
